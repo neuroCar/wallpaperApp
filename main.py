@@ -10,6 +10,7 @@ def openFile():
     fileDialog.setWindowTitle("Select File")
     fileDialog.setFileMode(QFileDialog.FileMode.ExistingFile)
     fileDialog.setViewMode(QFileDialog.ViewMode.Detail)
+    fileDialog.setNameFilter("Images (*.png *.jpg *.jpeg *.bmp *.webp)")
 
     if fileDialog.exec():
         file = fileDialog.selectedFiles()

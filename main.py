@@ -15,7 +15,7 @@ import os, subprocess, platform
 
 # === Initialize important variables ===
 osName = platform.system()
-defWallpapers = os.listdir("./wallpapers")
+defWallpapers = os.listdir("./wallpapers/")
 idx = defWallpapers.index("fox.png")
 
 # === Functions ===
@@ -43,7 +43,7 @@ def detectDE(file): # Detects desktop environments on Linux
             else:
                 cmd = ["gsettings", "set", "org.gnome.desktop.background", "picture-uri", f'file://{file}']
         case "Hyprland" | "sway" | "niri":
-            cmd = ["awww", "img" f"{file}"]
+            cmd = ["awww", "img", f"{file}"]
 
         case "i3":
             cmd = ["feh", "--bg-scale", f"{file}"]

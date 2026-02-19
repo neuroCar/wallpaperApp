@@ -1,6 +1,8 @@
 # Wallpaper App (I can't think of a name at this moment)
 ## A Simple Wallpaper App
-This is a wallpaper app for both Windows and Linux. I am currently working on support for MacOS
+This is a wallpaper app for both Windows and Linux. I am currently working on support for MacOS.
+
+![](https://github.com/neuroCat/wallpaperApp/assets/example.mp4)
 
 ## Plans for the future
 I want to:

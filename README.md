@@ -2,7 +2,8 @@
 ## A Simple Wallpaper App
 This is a wallpaper app for both Windows and Linux. I am currently working on support for MacOS.
 
-![](https://github.com/neuroCat/wallpaperApp/assets/example.mp4)
+![](./assets/example.mp4)
+<video src="./assets/example.mp4" controls preload></video>
 
 ## Plans for the future
 I want to:

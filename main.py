@@ -3,9 +3,13 @@ from PySide6.QtGui import QPixmap
 from PySide6.QtCore import Qt
 import os, subprocess, platform
 
+# === Initialize important variables ===
 osName = platform.system()
+defWallpapers = os.listdir("./wallpapers")
+idx = defWallpapers.index("fox.png")
 
-def openFile():
+# === Functions ===
+def openFile(): # Allows user to select a file for the wallpaper
     fileDialog = QFileDialog(window)
     fileDialog.setWindowTitle("Select File")
     fileDialog.setFileMode(QFileDialog.FileMode.ExistingFile)
@@ -15,9 +19,9 @@ def openFile():
     if fileDialog.exec():
         file = fileDialog.selectedFiles()
         print("Selected Wallpaper:", file[0])
-        return file[0]
+        changePaper(file[0])
 
-def detectDE(file):
+def detectDE(file): # Detects desktop environments on Linux
     de = os.environ["XDG_CURRENT_DESKTOP"]
     
     match de:
@@ -40,7 +44,7 @@ def detectDE(file):
     print(f"DE: {de}\nCommand: {cmd}")
     return cmd
 
-def winPaper(file):
+def winPaper(file): # Windows custom wallpaper function
     import ctypes
     from PIL import Image
 
@@ -53,10 +57,7 @@ def winPaper(file):
 
     os.remove("img.bmp")
 
-def changePaper():
-    # file = "/home/neuro/Downloads/FrierenWallpaper.jpeg"
-    # file = "c:/Users/n2194/Downloads/FrierenWallpaper.jpg"
-    file = openFile()
+def changePaper(file): # Main wallpaper function
     file = os.path.abspath(file)
     if osName == "Windows":
         print("Running on Windows")
@@ -73,13 +74,47 @@ def changePaper():
 
     subprocess.run(cmd)
 
+def change(dir: str): # Changes displayed wallpaper in the app
+    global idx
+    if dir == "back": idx -= 1
+    if dir == "next": idx += 1
+    wallpaper.setPixmap(QPixmap(f"wallpapers/{defWallpapers[idx]}").scaled(wallpaper.size(), Qt.KeepAspectRatio, Qt.SmoothTransformation))
+
+# === Initialize app and window ===
 app = QApplication([])
-window = QMainWindow()
+window = QWidget()
 window.setWindowTitle("Test2")
 window.setGeometry(0, 0, 1024, 512)
 
-btn = QPushButton("Open File", window)
-btn.clicked.connect(changePaper)
+# === Setup app layout ===
+mainLay = QVBoxLayout()
+secLay = QHBoxLayout()
+
+# === Create Widgets ===
+wallpaper = QLabel()
+wallpaper.setFixedSize(1024, 512)
+wallpaper.setPixmap(QPixmap(f"wallpapers/{defWallpapers[idx]}").scaled(wallpaper.size()))
+
+backBtn = QPushButton("<- Previous")
+backBtn.clicked.connect(lambda: change("back"))
+
+selectBtn = QPushButton("Select")
+selectBtn.clicked.connect(lambda: changePaper(f"wallpapers/{defWallpapers[idx]}"))
+
+fileBtn = QPushButton("Open File")
+fileBtn.clicked.connect(openFile)
+
+nextBtn = QPushButton("Next ->")
+nextBtn.clicked.connect(lambda: change("next"))
+
+# === Add widgets to the screen ===
+window.setLayout(mainLay)
+mainLay.addWidget(wallpaper)
+secLay.addWidget(backBtn)
+secLay.addWidget(selectBtn)
+secLay.addWidget(fileBtn)
+secLay.addWidget(nextBtn)
+mainLay.addLayout(secLay)
 
 window.show()
 app.exec()

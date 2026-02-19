@@ -1,3 +1,13 @@
+"""
+Documentation used:
+    * https://doc.qt.io/qtforpython-6.5/PySide6/QtWidgets/
+    * https://www.tutorialspoint.com/pyqt/index.htm
+
+Wallpapers from:
+    * r/wallpapers
+    * https://github.com/D3Ext/aesthetic-wallpapers
+    * https://microsoft.design/wallpapers/
+"""
 from PySide6.QtWidgets import *
 from PySide6.QtGui import QPixmap
 from PySide6.QtCore import Qt

@@ -13,7 +13,7 @@ Linux:
 * AWWW for Wayland
 * GNOME & KDE Plasma use their built in functions
 
--# If you want support for your DE/WM, please do it yourself. I would rather keep myself from a headache of dealing with Linux.
+<sub><sup> If you want support for your DE/WM, please do it yourself. I would rather keep myself from a headache of dealing with Linux.</sup></sub>
 
 ## Documentation used:
 * [QT Docs](https://doc.qt.io/qtforpython-6.5/PySide6/QtWidgets/)

@@ -10,8 +10,9 @@ Wallpapers from:
 """
 from PySide6.QtWidgets import *
 from PySide6.QtGui import QPixmap
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, QTimer
 import os, subprocess, platform
+import random as rand
 
 # === Initialize important variables ===
 osName = platform.system()
@@ -76,11 +77,11 @@ def winPaper(file): # Windows custom wallpaper function
 def changePaper(file): # Main wallpaper function
     file = os.path.abspath(file)
     if osName == "Windows":
-        print("Running on Windows")
+        # print("Running on Windows")
         winPaper(file)
         return
     elif osName == "Linux":
-        print("Running on Linux")
+        # print("Running on Linux")
         cmd = detectDE(file)
     # elif osName == "Darwin":
     #     print("Running on macOS")
@@ -92,9 +93,21 @@ def changePaper(file): # Main wallpaper function
 
 def change(dir: str): # Changes displayed wallpaper in the app
     global idx
-    if dir == "back": idx -= 1
-    if dir == "next": idx += 1
+    if dir == "back":
+        if idx == 0: idx = len(defWallpapers)
+        idx -= 1
+    if dir == "next":
+        if idx == len(defWallpapers): idx = 0 
+        idx += 1
+    if dir == "rand": idx = rand.randint(0, len(defWallpapers)-1)
     wallpaper.setPixmap(QPixmap(f"wallpapers/{defWallpapers[idx]}").scaled(wallpaper.size(), Qt.KeepAspectRatio, Qt.SmoothTransformation))
+
+def slideshow():
+    if slideshowToggle.isChecked():
+        change("rand") if randToggle.isChecked() else change("next")
+        changePaper(f"wallpapers/{defWallpapers[idx]}")
+    else:
+        timer.stop()
 
 # === Initialize app and window ===
 app = QApplication([])
@@ -105,14 +118,21 @@ window.setGeometry(0, 0, 1024, 512)
 # === Setup app layout ===
 mainLay = QVBoxLayout()
 secLay = QHBoxLayout()
+thirdLay = QHBoxLayout()
 
 # === Create Widgets ===
+timer = QTimer()
+timer.timeout.connect(slideshow)
+
 wallpaper = QLabel()
 wallpaper.setFixedSize(1024, 512)
 wallpaper.setPixmap(QPixmap(f"wallpapers/{defWallpapers[idx]}").scaled(wallpaper.size()))
 
 backBtn = QPushButton("<- Previous")
 backBtn.clicked.connect(lambda: change("back"))
+
+randBtn = QPushButton("Random 🎲")
+randBtn.clicked.connect(lambda: change("rand"))
 
 selectBtn = QPushButton("Select")
 selectBtn.clicked.connect(lambda: changePaper(f"wallpapers/{defWallpapers[idx]}"))
@@ -123,14 +143,38 @@ fileBtn.clicked.connect(openFile)
 nextBtn = QPushButton("Next ->")
 nextBtn.clicked.connect(lambda: change("next"))
 
+slideshowToggle = QCheckBox("Enable Slideshow")
+slideshowToggle.setChecked(False)
+slideshowToggle.toggled.connect(lambda: timer.start(60000))
+
+randToggle = QCheckBox("Enable Random For Slideshow")
+randToggle.setChecked(True)
+
+timeSpinbox = QSpinBox()
+timeSpinbox.setRange(1, 240)
+timeSpinbox.setValue(1)
+timeSpinbox.setSuffix(" Minutes")
+timeSpinbox.valueChanged.connect(lambda val: timer.setInterval(val * 60000))
+
+spinLabel = QLabel("Time between changes in slideshow")
+
 # === Add widgets to the screen ===
 window.setLayout(mainLay)
 mainLay.addWidget(wallpaper)
+
 secLay.addWidget(backBtn)
+secLay.addWidget(randBtn)
 secLay.addWidget(selectBtn)
 secLay.addWidget(fileBtn)
 secLay.addWidget(nextBtn)
+
+thirdLay.addWidget(slideshowToggle)
+thirdLay.addWidget(randToggle)
+thirdLay.addWidget(timeSpinbox)
+thirdLay.addWidget(spinLabel)
+
 mainLay.addLayout(secLay)
+mainLay.addLayout(thirdLay)
 
 window.show()
 app.exec()

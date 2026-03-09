@@ -4,10 +4,16 @@ This is a wallpaper app for both Windows and Linux. I am currently working on su
 
 ![](./assets/example.gif)
 
-## Plans for the future
-I want to:
-- Add random function to select a random wallpaper
-- Add the wallpaper changing every so often
+## Required packages:
+All OSs:
+* PySide6
+
+Linux:
+* Feh for X11
+* AWWW for Wayland
+* GNOME & KDE Plasma use their built in functions
+
+-# If you want support for your DE/WM, please do it yourself. I would rather keep myself from a headache of dealing with Linux.
 
 ## Documentation used:
 * [QT Docs](https://doc.qt.io/qtforpython-6.5/PySide6/QtWidgets/)

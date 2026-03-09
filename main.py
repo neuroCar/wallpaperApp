@@ -55,17 +55,23 @@ def detectDE(file): # Detects desktop environments on Linux
     return cmd
 
 def winPaper(file): # Windows custom wallpaper function
-    import ctypes
+    import ctypes, shutil
     from PIL import Image
+
+    APPDATA = os.getenv("APPDATA")
+    dest = os.path.join(APPDATA, 'wallpaper')
+    os.makedirs(dest, exist_ok=True)
 
     # file = os.path.abspath(file)
     img = Image.open(file)
     if img.mode != 'RGB': img = img.convert("RGB")
-
     img.save("img.bmp", 'BMP')
-    ctypes.windll.user32.SystemParametersInfoW(20, 0, os.path.abspath("img.bmp"), 3)
+    if (os.path.isfile(dest + '/img.bmp')):
+        os.remove(f'{dest}/img.bmp')
+    shutil.move('img.bmp', dest)
 
-    os.remove("img.bmp")
+    
+    ctypes.windll.user32.SystemParametersInfoW(20, 0, os.path.abspath(dest + "/img.bmp"), 3)
 
 def changePaper(file): # Main wallpaper function
     file = os.path.abspath(file)

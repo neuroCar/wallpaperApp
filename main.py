@@ -113,7 +113,7 @@ def slideshow():
 app = QApplication([])
 window = QWidget()
 window.setWindowTitle("Test2")
-window.setGeometry(0, 0, 1024, 512)
+window.setGeometry(0, 0, 512, 256)
 
 # === Setup app layout ===
 mainLay = QVBoxLayout()
@@ -125,38 +125,47 @@ timer = QTimer()
 timer.timeout.connect(slideshow)
 
 wallpaper = QLabel()
-wallpaper.setFixedSize(1024, 512)
+wallpaper.setFixedSize(512, 256)
 wallpaper.setPixmap(QPixmap(f"wallpapers/{defWallpapers[idx]}").scaled(wallpaper.size()))
 
 backBtn = QPushButton("<- Previous")
 backBtn.clicked.connect(lambda: change("back"))
+backBtn.setFixedWidth(100)
 
 randBtn = QPushButton("Random 🎲")
 randBtn.clicked.connect(lambda: change("rand"))
+randBtn.setFixedWidth(100)
 
 selectBtn = QPushButton("Select")
 selectBtn.clicked.connect(lambda: changePaper(f"wallpapers/{defWallpapers[idx]}"))
+selectBtn.setFixedWidth(100)
 
 fileBtn = QPushButton("Open File")
 fileBtn.clicked.connect(openFile)
+fileBtn.setFixedWidth(100)
 
 nextBtn = QPushButton("Next ->")
 nextBtn.clicked.connect(lambda: change("next"))
+nextBtn.setFixedWidth(100)
 
 slideshowToggle = QCheckBox("Enable Slideshow")
 slideshowToggle.setChecked(False)
 slideshowToggle.toggled.connect(lambda: timer.start(60000))
+slideshowToggle.setFixedWidth(110)
 
 randToggle = QCheckBox("Enable Random For Slideshow")
 randToggle.setChecked(True)
+randToggle.setFixedWidth(105)
 
 timeSpinbox = QSpinBox()
 timeSpinbox.setRange(1, 240)
 timeSpinbox.setValue(1)
 timeSpinbox.setSuffix(" Minutes")
 timeSpinbox.valueChanged.connect(lambda val: timer.setInterval(val * 60000))
+timeSpinbox.setFixedWidth(100)
 
 spinLabel = QLabel("Time between changes in slideshow")
+spinLabel.setFixedWidth(125)
 
 # === Add widgets to the screen ===
 window.setLayout(mainLay)
